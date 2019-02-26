@@ -2,9 +2,10 @@ package main
 
 import (
     "fmt"
-    // "log"
+    "log"
     "os"
     "strings"
+    "time"
     "github.com/nlopes/slack"
     _ "github.com/joho/godotenv/autoload"
 )
@@ -19,19 +20,53 @@ func FormatCommands(input string) []string {
 func ControllerRouting(args []string) string {
     numArgs := len(args)
     if numArgs > 3 || numArgs < 1 {
-        return "size bad"
+        return "help"
     }
     switch firstArg := args[0]; firstArg {
     case "get":
-        return "get"
+        response, err := getParsing(args[1:])
+        if err != nil {
+            log.Fatal(err)
+        }
+        return response
     case "set":
-        return "set"
+        response, err := setParsing(args[1:])
+        if err != nil {
+            log.Fatal(err)
+        }
+        return response
     default:
         return "help"
     }
     // for _, arg := range args {
     //
     // }
+}
+
+func getParsing(args []string) (string, error) {
+    numArgs := len(args)
+    if numArgs != 1 {
+        return "help", nil
+    }
+    t1, e := time.Parse(time.RFC3339, args[0])
+    if e != nil {
+        return "help", e
+    }
+    startTime := t1.Truncate(30*time.Minute)
+    return startTime.String(), nil
+}
+
+func setParsing(args []string) (string, error) {
+    numArgs := len(args)
+    if numArgs != 2 {
+        return "help", nil
+    }
+    t1, e := time.Parse(time.RFC3339, args[0])
+    if e != nil {
+        return "help", e
+    }
+    startTime := t1.Truncate(30*time.Minute)
+    return startTime.String(), nil
 }
 
 // schema

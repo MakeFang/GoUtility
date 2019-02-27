@@ -23,5 +23,6 @@
 .env
 .vscode
 .DS_Store
+test.db
 
 # End of https://www.gitignore.io/api/go

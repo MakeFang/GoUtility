@@ -6,6 +6,7 @@ import (
     "os"
     "strings"
     "time"
+    "github.com/MakeFang/GoUtility/pkg/slack"
     "github.com/nlopes/slack"
     "github.com/jinzhu/gorm"
     _ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -66,6 +67,8 @@ func ControllerRouting(args []string, db *gorm.DB, userID string) string {
     // }
 }
 
+// #TODO: disallow booking time that has passed
+
 func GetParsing(args []string) (string, error) {
     numArgs := len(args)
     if numArgs != 1 {
@@ -117,15 +120,18 @@ func main() {
 
     db.AutoMigrate(&Reservation{}, &User{})
 
-    api := slack.New(os.Getenv("BOT_OAUTH_ACCESS_TOKEN"))
+    botToken := os.Getenv("BOT_OAUTH_ACCESS_TOKEN")
+    slackClient := slackrtm.CreateSlackClient(botToken)
+
+    // api := slack.New(botToken)
     // logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
     // slack.SetLogger(logger)
     // api.SetDebug(true)
+    //
+    // rtm := api.NewRTM()
+    // go rtm.ManageConnection()
 
-    rtm := api.NewRTM()
-    go rtm.ManageConnection()
-
-    for msg := range rtm.IncomingEvents {
+    for msg := range slackClient.IncomingEvents {
         fmt.Println("Event Received: ", msg.Type)
         switch ev := msg.Data.(type) {
         case *slack.MessageEvent:

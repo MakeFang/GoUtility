@@ -37,7 +37,8 @@ func GetIncomingMsg(slackClient *slack.RTM) {
             // // fmt.Printf("%+v\n", user)
             // // fmt.Printf("%+v\n", rtm.NewOutgoingMessage("hello", ev.Msg.Channel))
             // // fmt.Println(FormatCommands(ev.Msg.Text))
-            // formattedMsg := FormatCommands(ev.Msg.Text)
+            formattedMsg := FormatCommands(ev.Msg.Text)
+            fmt.Println(formattedMsg)
             // outputMsg := ControllerRouting(formattedMsg, db, ev.Msg.User)
             // slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg, ev.Msg.Channel))
         }

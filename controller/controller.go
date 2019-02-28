@@ -2,21 +2,24 @@ package controller
 
 import (
     "strings"
-    "github.com/MakeFang/GoUtility/interactor"
+    interactor "github.com/MakeFang/GoUtility/interactor"
 )
 
-type returnRes struct {
-    Msg string
-    Err error
-    Code uint
-}
+// type returnRes struct {
+//     Msg string
+//     Err error
+//     Code uint
+// }
+//
+
+type ReturnRes = interactor.ReturnRes
 
 var helpString string = `Type in <operation> <options>
   - get
   - set
     [time]: time in the format yyyy-mm-ddThh:mm:ss-08:00`
-    
-var returnHelp returnRes = returnRes{Msg: helpString, Err: nil, Code: 0}
+
+var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil, Code: 0}
 
 func FormatCommands(input string) []string {
     result := strings.Split(input, " ")
@@ -24,7 +27,7 @@ func FormatCommands(input string) []string {
     return result
 }
 
-func ControllerRouting(args []string) returnRes {
+func ControllerRouting(args []string) ReturnRes {
     numArgs := len(args)
     if numArgs > 3 || numArgs < 1 {
         return returnHelp
@@ -32,10 +35,10 @@ func ControllerRouting(args []string) returnRes {
     switch operation := args[0]; operation {
     case "get":
         t1, _ := interactor.GetParsing(args[1:])
-        return returnRes{Msg: t1, Err: nil, Code: 0}
+        return ReturnRes{Msg: t1, Err: nil, Code: 0}
     case "set":
         t1, _ := interactor.SetParsing(args[1:])
-        return returnRes{Msg: t1, Err: nil, Code: 0}
+        return ReturnRes{Msg: t1, Err: nil, Code: 0}
     default:
         return returnHelp
     }

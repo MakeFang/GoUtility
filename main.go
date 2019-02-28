@@ -5,11 +5,13 @@ import (
     // "log"
     "os"
     // "strings"
-    "time"
+    // "time"
     "github.com/MakeFang/GoUtility/slackrtm"
     // "github.com/nlopes/slack"
-    "github.com/jinzhu/gorm"
-    _ "github.com/jinzhu/gorm/dialects/sqlite"
+    "github.com/MakeFang/GoUtility/sqldb"
+    "github.com/MakeFang/GoUtility/interactor"
+    // "github.com/jinzhu/gorm"
+    // _ "github.com/jinzhu/gorm/dialects/sqlite"
     _ "github.com/joho/godotenv/autoload"
 )
 
@@ -69,56 +71,60 @@ import (
 
 // #TODO: disallow booking time that has passed
 
-func GetParsing(args []string) (string, error) {
-    numArgs := len(args)
-    if numArgs != 1 {
-        return "help", nil
-    }
-    t1, e := time.Parse(time.RFC3339, args[0])
-    if e != nil {
-        return "help", e
-    }
-    startTime := t1.Truncate(30*time.Minute)
-    return startTime.Format(time.RFC3339), nil
-}
-
-func SetParsing(args []string) (string, error) {
-    numArgs := len(args)
-    if numArgs != 1 {
-        return "help", nil
-    }
-    t1, e := time.Parse(time.RFC3339, args[0])
-    if e != nil {
-        return "help", e
-    }
-    startTime := t1.Truncate(30*time.Minute)
-    return startTime.Format(time.RFC3339), nil
-}
+// func GetParsing(args []string) (string, error) {
+//     numArgs := len(args)
+//     if numArgs != 1 {
+//         return "help", nil
+//     }
+//     t1, e := time.Parse(time.RFC3339, args[0])
+//     if e != nil {
+//         return "help", e
+//     }
+//     startTime := t1.Truncate(30*time.Minute)
+//     return startTime.Format(time.RFC3339), nil
+// }
+//
+// func SetParsing(args []string) (string, error) {
+//     numArgs := len(args)
+//     if numArgs != 1 {
+//         return "help", nil
+//     }
+//     t1, e := time.Parse(time.RFC3339, args[0])
+//     if e != nil {
+//         return "help", e
+//     }
+//     startTime := t1.Truncate(30*time.Minute)
+//     return startTime.Format(time.RFC3339), nil
+// }
 
 // schema
-type Reservation struct {
-    gorm.Model
-    StartTime time.Time
-    UserSlackID string
-    RoomID string
-}
-
-type User struct {
-    gorm.Model
-    SlackID string
-    Reservations []Reservation `gorm:"foreignkey:UserSlackID;association_foreignkey:SlackID"`
-}
+// type Reservation struct {
+//     gorm.Model
+//     StartTime time.Time
+//     UserSlackID string
+//     RoomID string
+// }
+//
+// type User struct {
+//     gorm.Model
+//     SlackID string
+//     Reservations []Reservation `gorm:"foreignkey:UserSlackID;association_foreignkey:SlackID"`
+// }
 
 // Private logic
 
 func main() {
-    db, err := gorm.Open("sqlite3", "test.db")
-    if err != nil {
-        panic("failed to connect to database")
-    }
-    defer db.Close()
+    // db, err := gorm.Open("sqlite3", "test.db")
+    // if err != nil {
+    //     panic("failed to connect to database")
+    // }
+    // defer db.Close()
+    //
+    // db.AutoMigrate(&Reservation{}, &User{})
 
-    db.AutoMigrate(&Reservation{}, &User{})
+    db := sqldb.SetupDB()
+    interactor.SetDB(db)
+    defer db.Close()
 
     botToken := os.Getenv("BOT_OAUTH_ACCESS_TOKEN")
     slackClient := slackrtm.CreateSlackClient(botToken)

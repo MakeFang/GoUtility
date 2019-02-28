@@ -6,7 +6,7 @@ import (
     "os"
     "strings"
     "time"
-    "github.com/MakeFang/GoUtility/pkg/slack"
+    "github.com/MakeFang/GoUtility/slackrtm"
     "github.com/nlopes/slack"
     "github.com/jinzhu/gorm"
     _ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -155,7 +155,7 @@ func main() {
             // fmt.Println(FormatCommands(ev.Msg.Text))
             formattedMsg := FormatCommands(ev.Msg.Text)
             outputMsg := ControllerRouting(formattedMsg, db, ev.Msg.User)
-            rtm.SendMessage(rtm.NewOutgoingMessage(outputMsg, ev.Msg.Channel))
+            slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg, ev.Msg.Channel))
         }
     }
 }

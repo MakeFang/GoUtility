@@ -122,6 +122,7 @@ func main() {
 
     botToken := os.Getenv("BOT_OAUTH_ACCESS_TOKEN")
     slackClient := slackrtm.CreateSlackClient(botToken)
+    slack.GetIncomingMsg(slackClient)
 
     // api := slack.New(botToken)
     // logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
@@ -131,31 +132,31 @@ func main() {
     // rtm := api.NewRTM()
     // go rtm.ManageConnection()
 
-    for msg := range slackClient.IncomingEvents {
-        fmt.Println("Event Received: ", msg.Type)
-        switch ev := msg.Data.(type) {
-        case *slack.MessageEvent:
-            fmt.Printf("%+v\n", ev.Msg)
-            direct := strings.HasPrefix(ev.Msg.Channel, "D")
-            if !direct || ev.Msg.SubType == "message_deleted" {
-                fmt.Println("message not direct: ignored.")
-                continue
-            }
-            var user User
-            var allUsers []User
-            // fmt.Println(ev.Msg.User)
-            // fmt.Printf("%+v\n", User{SlackID: ev.Msg.User})
-            db.Where(User{SlackID: ev.Msg.User}).FirstOrCreate(&user)
-            db.Find(&allUsers)
-            fmt.Println(allUsers)
-            fmt.Println(user)
-            // db.Where("SlackID = ?", ev.Msg.User).First(&user)
-            // fmt.Printf("%+v\n", user)
-            // fmt.Printf("%+v\n", rtm.NewOutgoingMessage("hello", ev.Msg.Channel))
-            // fmt.Println(FormatCommands(ev.Msg.Text))
-            formattedMsg := FormatCommands(ev.Msg.Text)
-            outputMsg := ControllerRouting(formattedMsg, db, ev.Msg.User)
-            slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg, ev.Msg.Channel))
-        }
-    }
+    // for msg := range slackClient.IncomingEvents {
+    //     fmt.Println("Event Received: ", msg.Type)
+    //     switch ev := msg.Data.(type) {
+    //     case *slack.MessageEvent:
+    //         fmt.Printf("%+v\n", ev.Msg)
+    //         direct := strings.HasPrefix(ev.Msg.Channel, "D")
+    //         if !direct || ev.Msg.SubType == "message_deleted" {
+    //             fmt.Println("message not direct: ignored.")
+    //             continue
+    //         }
+    //         var user User
+    //         var allUsers []User
+    //         // fmt.Println(ev.Msg.User)
+    //         // fmt.Printf("%+v\n", User{SlackID: ev.Msg.User})
+    //         db.Where(User{SlackID: ev.Msg.User}).FirstOrCreate(&user)
+    //         db.Find(&allUsers)
+    //         fmt.Println(allUsers)
+    //         fmt.Println(user)
+    //         // db.Where("SlackID = ?", ev.Msg.User).First(&user)
+    //         // fmt.Printf("%+v\n", user)
+    //         // fmt.Printf("%+v\n", rtm.NewOutgoingMessage("hello", ev.Msg.Channel))
+    //         // fmt.Println(FormatCommands(ev.Msg.Text))
+    //         formattedMsg := FormatCommands(ev.Msg.Text)
+    //         outputMsg := ControllerRouting(formattedMsg, db, ev.Msg.User)
+    //         slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg, ev.Msg.Channel))
+    //     }
+    // }
 }

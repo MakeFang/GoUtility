@@ -19,7 +19,7 @@ var helpString string = `Type in <operation> <options>
   - set
     [time]: time in the format yyyy-mm-ddThh:mm:ss-08:00`
 
-var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil, Code: 0}
+var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil}
 
 func FormatCommands(input string) []string {
     result := strings.Split(input, " ")
@@ -27,18 +27,18 @@ func FormatCommands(input string) []string {
     return result
 }
 
-func ControllerRouting(args []string) ReturnRes {
+func ControllerRouting(args []string, userID string) ReturnRes {
     numArgs := len(args)
     if numArgs > 3 || numArgs < 1 {
         return returnHelp
     }
     switch operation := args[0]; operation {
     case "get":
-        t1, _ := interactor.GetParsing(args[1:])
-        return ReturnRes{Msg: t1, Err: nil, Code: 0}
+        response := interactor.GetParsing(args[1:], userID)
+        return response
     case "set":
-        t1, _ := interactor.SetParsing(args[1:])
-        return ReturnRes{Msg: t1, Err: nil, Code: 0}
+        response := interactor.SetParsing(args[1:], userID)
+        return response
     default:
         return returnHelp
     }

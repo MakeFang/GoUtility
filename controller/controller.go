@@ -2,12 +2,43 @@ package controller
 
 import (
     "strings"
+    "github.com/MakeFang/GoUtility/interactor"
 )
+
+type returnRes struct {
+    Msg string
+    Err error
+    Code uint
+}
+
+var helpString string = `Type in <operation> <options>
+  - get
+  - set
+    [time]: time in the format yyyy-mm-ddThh:mm:ss-08:00`
+    
+var returnHelp returnRes = returnRes{Msg: helpString, Err: nil, Code: 0}
 
 func FormatCommands(input string) []string {
     result := strings.Split(input, " ")
     // fmt.Println(result)
     return result
+}
+
+func ControllerRouting(args []string) returnRes {
+    numArgs := len(args)
+    if numArgs > 3 || numArgs < 1 {
+        return returnHelp
+    }
+    switch operation := args[0]; operation {
+    case "get":
+        t1, _ := interactor.GetParsing(args[1:])
+        return returnRes{Msg: t1, Err: nil, Code: 0}
+    case "set":
+        t1, _ := interactor.SetParsing(args[1:])
+        return returnRes{Msg: t1, Err: nil, Code: 0}
+    default:
+        return returnHelp
+    }
 }
 
 // func ControllerRouting(args []string, db *gorm.DB, userID string) string {

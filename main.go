@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
-    "log"
+    // "fmt"
+    // "log"
     "os"
-    "strings"
+    // "strings"
     "time"
     "github.com/MakeFang/GoUtility/slackrtm"
     // "github.com/nlopes/slack"

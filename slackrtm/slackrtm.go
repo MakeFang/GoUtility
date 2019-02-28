@@ -4,7 +4,7 @@ import (
     "fmt"
     "strings"
     "github.com/nlopes/slack"
-    // "github.com/MakeFang/GoUtility/controller"
+    "github.com/MakeFang/GoUtility/controller"
 )
 
 func CreateSlackClient(apiKey string) *slack.RTM {
@@ -37,10 +37,11 @@ func GetIncomingMsg(slackClient *slack.RTM) {
             // // fmt.Printf("%+v\n", user)
             // // fmt.Printf("%+v\n", rtm.NewOutgoingMessage("hello", ev.Msg.Channel))
             // // fmt.Println(FormatCommands(ev.Msg.Text))
-            formattedMsg := FormatCommands(ev.Msg.Text)
-            fmt.Println(formattedMsg)
-            // outputMsg := ControllerRouting(formattedMsg, db, ev.Msg.User)
-            // slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg, ev.Msg.Channel))
+            formattedMsg := controller.FormatCommands(ev.Msg.Text)
+            // fmt.Println(formattedMsg)
+            outputMsg := controller.ControllerRouting(formattedMsg)
+            // fmt.Println(outputMsg.Msg)
+            slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg.Msg, ev.Msg.Channel))
         }
     }
 }

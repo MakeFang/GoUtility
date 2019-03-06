@@ -39,6 +39,9 @@ func ControllerRouting(args []string, userID string) ReturnRes {
     case "set":
         response := interactor.SetParsing(args[1:], userID)
         return response
+    case "cancel":
+        response := interactor.CancelParsing(args[1:], userID)
+        return response
     default:
         return returnHelp
     }

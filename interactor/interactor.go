@@ -5,10 +5,11 @@ import (
     "time"
     // "errors"
     "github.com/jinzhu/gorm"
-    _ "github.com/jinzhu/gorm/dialects/sqlite"
+    "github.com/jinzhu/gorm/dialects/sqlite"
     // "github.com/MakeFang/GoUtility/sqldb"
 )
 
+// ReturnRes is a struct with returning message string and err.
 type ReturnRes struct {
     Msg string
     Err error
@@ -19,6 +20,7 @@ type ReturnRes struct {
 //
 // }
 
+// Reservation is a struct schema with details about the resevation.
 type Reservation struct {
     gorm.Model
     StartTime time.Time
@@ -26,6 +28,7 @@ type Reservation struct {
     RoomID string
 }
 
+// User is a struct schema for keeping track of users reservations
 type User struct {
     gorm.Model
     SlackID string
@@ -48,8 +51,11 @@ var helpString string = `Type in <operation> <arg1> <arg2> ...
 var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil}
 
 // #TODO: investigate other db options
+
+// DB is the gorm database.
 var DB *gorm.DB
 
+// SetDB is a function that sets value to DB variable.
 func SetDB(db *gorm.DB) {
     DB = db
     DB.AutoMigrate(&Reservation{}, &User{})
@@ -82,6 +88,7 @@ func SetDB(db *gorm.DB) {
 //
 // }
 
+// GetProcessing is function that process get requests
 func GetProcessing() []Reservation {
     var reservations []Reservation
     DB.Find(&reservations)
@@ -89,6 +96,7 @@ func GetProcessing() []Reservation {
     return reservations
 }
 
+// SetProcessing is function that process set requests
 func SetProcessing(t1 time.Time, userID string) ReturnRes {
     var reservation Reservation
     var resMsg string
@@ -111,6 +119,7 @@ func SetProcessing(t1 time.Time, userID string) ReturnRes {
     return ReturnRes{Msg: resMsg, Err: nil}
 }
 
+// CancelProcessing is function that process cancel requests
 func CancelProcessing(reservationID string, userID string) ReturnRes {
     // var reservations []Reservation
     var resMsg string
@@ -126,6 +135,7 @@ func CancelProcessing(reservationID string, userID string) ReturnRes {
 
 // var db *gorm.DB = sqldb.SetupDB()
 
+// GetParsing is function that parse get requests
 func GetParsing(args []string, userID string) ReturnRes {
     // valid := GetVal(args)
     reservations := GetProcessing()
@@ -143,6 +153,7 @@ func GetParsing(args []string, userID string) ReturnRes {
     // return startTime.Format(time.RFC3339), nil
 }
 
+// SetParsing is function that parse set requests
 func SetParsing(args []string, userID string) ReturnRes {
     numArgs := len(args)
     if numArgs != 1 {
@@ -157,6 +168,7 @@ func SetParsing(args []string, userID string) ReturnRes {
     return response
 }
 
+// CancelParsing is function that parse cancel requests
 func CancelParsing(args []string, userID string) ReturnRes {
     numArgs := len(args)
     if numArgs != 1 {

@@ -7,6 +7,7 @@ import (
     "github.com/MakeFang/GoUtility/controller"
 )
 
+// CreateSlackClient is a function that initiate the slack rtm.
 func CreateSlackClient(apiKey string) *slack.RTM {
     api := slack.New(apiKey)
     rtm := api.NewRTM()
@@ -14,6 +15,7 @@ func CreateSlackClient(apiKey string) *slack.RTM {
     return rtm
 }
 
+// GetIncomingMsg is a function that deals with incoming funciton.
 func GetIncomingMsg(slackClient *slack.RTM) {
     for msg := range slackClient.IncomingEvents {
         fmt.Println("Event Received: ", msg.Type)

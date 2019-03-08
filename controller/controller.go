@@ -12,6 +12,7 @@ import (
 // }
 //
 
+// ReturnRes is the return response.
 type ReturnRes = interactor.ReturnRes
 
 var helpString string = `Type in <operation> <arg1> <arg2> ...
@@ -29,12 +30,14 @@ var helpString string = `Type in <operation> <arg1> <arg2> ...
 
 var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil}
 
+// FormatCommands is a function for splitting input by spaces.
 func FormatCommands(input string) []string {
     result := strings.Split(input, " ")
     // fmt.Println(result)
     return result
 }
 
+// ControllerRouting is a function that sends different command to diff func.
 func ControllerRouting(args []string, userID string) ReturnRes {
     numArgs := len(args)
     if numArgs > 3 || numArgs < 1 {

@@ -27,22 +27,8 @@ func GetIncomingMsg(slackClient *slack.RTM) {
 				fmt.Println("message not direct: ignored.")
 				continue
 			}
-			// var user User
-			// var allUsers []User
-			// // fmt.Println(ev.Msg.User)
-			// // fmt.Printf("%+v\n", User{SlackID: ev.Msg.User})
-			// db.Where(User{SlackID: ev.Msg.User}).FirstOrCreate(&user)
-			// db.Find(&allUsers)
-			// fmt.Println(allUsers)
-			// fmt.Println(user)
-			// // db.Where("SlackID = ?", ev.Msg.User).First(&user)
-			// // fmt.Printf("%+v\n", user)
-			// // fmt.Printf("%+v\n", rtm.NewOutgoingMessage("hello", ev.Msg.Channel))
-			// // fmt.Println(FormatCommands(ev.Msg.Text))
 			formattedMsg := controller.FormatCommands(ev.Msg.Text)
-			// fmt.Println(formattedMsg)
 			outputMsg := controller.ControllerRouting(formattedMsg, ev.Msg.User)
-			// fmt.Println(outputMsg.Msg)
 			slackClient.SendMessage(slackClient.NewOutgoingMessage(outputMsg.Msg, ev.Msg.Channel))
 		}
 	}

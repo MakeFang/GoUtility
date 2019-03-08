@@ -2,11 +2,9 @@ package interactor
 
 import (
 	"fmt"
-	"time"
-	// "errors"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	// "github.com/MakeFang/GoUtility/sqldb"
+	"time"
 )
 
 // ReturnRes is a struct with returning message string and err.
@@ -15,10 +13,6 @@ type ReturnRes struct {
 	Err error
 	// Code uint
 }
-
-// type DBInterface interface {
-//
-// }
 
 // Reservation is a struct schema with details about the resevation.
 type Reservation struct {
@@ -61,33 +55,6 @@ func SetDB(db *gorm.DB) {
 	DB.AutoMigrate(&Reservation{}, &User{})
 }
 
-// type Rules struct {
-//     NumBlocks int
-//
-// }
-
-// func InputValidation() {
-//
-// }
-
-// type GetArgs struct {
-//     roomID string
-// }
-//
-// func GetVal(args []string) (GetArgs, error){
-//     if len(args) > 1 {
-//         return GetArgs{}, errors.NEW("")
-//     }
-// }
-//
-// func SetVal() bool{
-//
-// }
-//
-// func CancelVal() bool{
-//
-// }
-
 // GetProcessing is function that process get requests
 func GetProcessing() []Reservation {
 	var reservations []Reservation
@@ -112,9 +79,6 @@ func SetProcessing(t1 time.Time, userID string) ReturnRes {
 		resMsg = "Success. Reserved " + t1.Format(time.RFC3339)
 		return ReturnRes{Msg: resMsg, Err: nil}
 	}
-	// } else {
-	//     resMsg = "Failure. Time slot taken already."
-	// }
 	resMsg = "Failure. Time slot taken already."
 	return ReturnRes{Msg: resMsg, Err: nil}
 }
@@ -126,9 +90,9 @@ func CancelProcessing(reservationID string, userID string) ReturnRes {
 	var toDelete Reservation
 	DB.First(&toDelete, reservationID)
 	if toDelete.UserSlackID == userID {
-        resMsg = "Reservations canceled"
+		resMsg = "Reservations canceled"
 		DB.Delete(&toDelete)
-        return ReturnRes{Msg: resMsg, Err: nil}
+		return ReturnRes{Msg: resMsg, Err: nil}
 	}
 	// DB.Where(Reservation{StartTime: time.Time{}, UserSlackID: userID , RoomID: "1"}).Delete(Reservation{})
 	resMsg = "Slack ID mismatch. Unable to cancel reservation."
@@ -143,16 +107,6 @@ func GetParsing(args []string, userID string) ReturnRes {
 	reservations := GetProcessing()
 	response := fmt.Sprintf("%v", reservations)
 	return ReturnRes{Msg: response, Err: nil}
-	// numArgs := len(args)
-	// if numArgs != 1 {
-	//     return "help", nil
-	// }
-	// t1, e := time.Parse(time.RFC3339, args[0])
-	// if e != nil {
-	//     return "help", e
-	// }
-	// startTime := t1.Truncate(30*time.Minute)
-	// return startTime.Format(time.RFC3339), nil
 }
 
 // SetParsing is function that parse set requests

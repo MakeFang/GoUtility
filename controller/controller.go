@@ -1,8 +1,8 @@
 package controller
 
 import (
-    "strings"
-    interactor "github.com/MakeFang/GoUtility/interactor"
+	interactor "github.com/MakeFang/GoUtility/interactor"
+	"strings"
 )
 
 // type returnRes struct {
@@ -32,30 +32,30 @@ var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil}
 
 // FormatCommands is a function for splitting input by spaces.
 func FormatCommands(input string) []string {
-    result := strings.Split(input, " ")
-    // fmt.Println(result)
-    return result
+	result := strings.Split(input, " ")
+	// fmt.Println(result)
+	return result
 }
 
 // ControllerRouting is a function that sends different command to diff func.
 func ControllerRouting(args []string, userID string) ReturnRes {
-    numArgs := len(args)
-    if numArgs > 3 || numArgs < 1 {
-        return returnHelp
-    }
-    switch operation := args[0]; operation {
-    case "get":
-        response := interactor.GetParsing(args[1:], userID)
-        return response
-    case "set":
-        response := interactor.SetParsing(args[1:], userID)
-        return response
-    case "cancel":
-        response := interactor.CancelParsing(args[1:], userID)
-        return response
-    default:
-        return returnHelp
-    }
+	numArgs := len(args)
+	if numArgs > 3 || numArgs < 1 {
+		return returnHelp
+	}
+	switch operation := args[0]; operation {
+	case "get":
+		response := interactor.GetParsing(args[1:], userID)
+		return response
+	case "set":
+		response := interactor.SetParsing(args[1:], userID)
+		return response
+	case "cancel":
+		response := interactor.CancelParsing(args[1:], userID)
+		return response
+	default:
+		return returnHelp
+	}
 }
 
 // func ControllerRouting(args []string, db *gorm.DB, userID string) string {

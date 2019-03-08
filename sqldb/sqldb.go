@@ -1,9 +1,9 @@
 package sqldb
 
 import (
-    // "time"
-    "github.com/jinzhu/gorm"
-    "github.com/jinzhu/gorm/dialects/sqlite"
+	// "time"
+	"github.com/jinzhu/gorm"
+	"github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 // type Reservation struct {
@@ -22,13 +22,13 @@ import (
 // SetupDB is a function that connects to a gorm db
 func SetupDB() *gorm.DB {
 
-    db, err := gorm.Open("sqlite3", "test.db")
-    if err != nil {
-        panic("failed to connect to database")
-    }
-    // defer db.Close()
+	db, err := gorm.Open("sqlite3", "test.db")
+	if err != nil {
+		panic("failed to connect to database")
+	}
+	// defer db.Close()
 
-    // db.AutoMigrate(&Reservation{}, &User{})
+	// db.AutoMigrate(&Reservation{}, &User{})
 
-    return db
+	return db
 }

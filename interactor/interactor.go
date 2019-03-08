@@ -5,7 +5,7 @@ import (
 	"time"
 	// "errors"
 	"github.com/jinzhu/gorm"
-	"github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	// "github.com/MakeFang/GoUtility/sqldb"
 )
 
@@ -126,10 +126,12 @@ func CancelProcessing(reservationID string, userID string) ReturnRes {
 	var toDelete Reservation
 	DB.First(&toDelete, reservationID)
 	if toDelete.UserSlackID == userID {
+        resMsg = "Reservations canceled"
 		DB.Delete(&toDelete)
+        return ReturnRes{Msg: resMsg, Err: nil}
 	}
 	// DB.Where(Reservation{StartTime: time.Time{}, UserSlackID: userID , RoomID: "1"}).Delete(Reservation{})
-	resMsg = "Reservations canceled"
+	resMsg = "Slack ID mismatch. Unable to cancel reservation."
 	return ReturnRes{Msg: resMsg, Err: nil}
 }
 

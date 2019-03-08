@@ -111,6 +111,19 @@ func SetProcessing(t1 time.Time, userID string) ReturnRes {
     return ReturnRes{Msg: resMsg, Err: nil}
 }
 
+func CancelProcessing(reservationID string, userID string) ReturnRes {
+    // var reservations []Reservation
+    var resMsg string
+    var toDelete Reservation
+    DB.First(&toDelete, reservationID)
+    if toDelete.UserSlackID == userID {
+        DB.Delete(&toDelete)
+    }
+    // DB.Where(Reservation{StartTime: time.Time{}, UserSlackID: userID , RoomID: "1"}).Delete(Reservation{})
+    resMsg = "Reservations canceled"
+    return ReturnRes{Msg: resMsg, Err: nil}
+}
+
 // var db *gorm.DB = sqldb.SetupDB()
 
 func GetParsing(args []string, userID string) ReturnRes {
@@ -145,5 +158,11 @@ func SetParsing(args []string, userID string) ReturnRes {
 }
 
 func CancelParsing(args []string, userID string) ReturnRes {
-    return ReturnRes{Msg: "cancel", Err: nil}
+    numArgs := len(args)
+    if numArgs != 1 {
+        return returnHelp
+    }
+    reservationID := args[0]
+    response := CancelProcessing(reservationID, userID)
+    return response
 }

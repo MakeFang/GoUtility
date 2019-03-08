@@ -14,10 +14,18 @@ import (
 
 type ReturnRes = interactor.ReturnRes
 
-var helpString string = `Type in <operation> <options>
-  - get
-  - set
-    [time]: time in the format yyyy-mm-ddThh:mm:ss-08:00`
+var helpString string = `Type in <operation> <arg1> <arg2> ...
+  - get [roomID]
+      - [roomID]:
+          (optional) 1 for room#1 or 2 for room#2.
+          If roomID not provided, will list all reservations
+          for the user.
+  - set [roomID] [time]
+      - [roomID]:
+          (NOT OPTIONAL) 1 for room#1 or 2 for room#2.
+      - [time]:
+          (NOT OPTIONAL) time in the format yyyy-mm-ddThh:mm:ss-08:00
+  - cancel [reservationID]`
 
 var returnHelp ReturnRes = ReturnRes{Msg: helpString, Err: nil}
 
